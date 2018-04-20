@@ -19,8 +19,9 @@ import butterknife.OnClick;
 /**
  * Created by rodneytressler on 12/14/17.
  */
-
+//Elijah Smith
 public class AccountFragment extends Fragment {
+    private ActivityCallback activityCallback;
 
     @BindView(R.id.name_input)
     protected EditText nameInput;
@@ -30,10 +31,17 @@ public class AccountFragment extends Fragment {
 
     @OnClick(R.id.button_finish)
     protected void onFinishButtonClicked(View view) {
+        if (nameInput.getText().toString().isEmpty() || classInput.getText().toString().isEmpty()) {
+            showAlertDialog("All Fields Must be Entered.");
+        } else if (classInput.getText().toString().equalsIgnoreCase("mage") || classInput.getText().toString().equalsIgnoreCase("warrior") || classInput.getText().toString().equalsIgnoreCase("archer")) {
+            activityCallback.createAccount(nameInput.getText().toString() , classInput.getText().toString());
+
+
+        } else {
+            showAlertDialog("Allowed fields are Mage, Warrior, and Archer.");
+        }
 
     }
-
-
 
 
     @Nullable
@@ -54,7 +62,6 @@ public class AccountFragment extends Fragment {
     }
 
 
-
     private void showAlertDialog(String message) {
         AlertDialog.Builder builder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -71,5 +78,14 @@ public class AccountFragment extends Fragment {
                 })
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
+    }
+
+    public interface ActivityCallback {
+        void createAccount(String name, String accountClass);
+
+    }
+
+    public void setCallback(ActivityCallback activityCallback) {
+        this.activityCallback = activityCallback;
     }
 }
